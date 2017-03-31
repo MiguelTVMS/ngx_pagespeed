@@ -1,6 +1,8 @@
 FROM debian:jessie
 
-USER root
+LABEL maintainer "João Miguel <joao@miguel.ms>"
+LABEL github "https://github.com/jmtvms/ngx_pagespeed"
+LABEL dockerhub "https://hub.docker.com/r/jmtvms/ngx_pagespeed/"
 
 RUN apt-get -y update && apt-get install -y \
  wget \
