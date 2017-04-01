@@ -62,8 +62,8 @@ ENV NPS_ENABLED=on
 ENV NPS_LOWER_CASE_HTML_NAMES=on
 ENV NPS_FILTERS=rewrite_javascript,move_css_to_head,rewrite_css,combine_css,combine_javascript,collapse_whitespace,dedup_inlined_images,elide_attributes
 
-COPY nginx.conf /usr/local/nginx/conf/
-COPY robots.txt /usr/local/nginx/html/
+COPY content/nginx.conf /usr/local/nginx/conf/
+COPY content/robots.txt /usr/local/nginx/html/
 
 # forward request and error logs to docker log collector
 RUN ln -sf /dev/stdout /usr/local/nginx/logs/access.log
