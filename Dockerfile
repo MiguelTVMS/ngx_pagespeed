@@ -14,17 +14,25 @@ ENV NGINX_VERSION=1.11.12
 ENV NPS_VERSION=1.11.33.5
 ENV PSOL_VERSION=1.11.33.4
 ENV SUBS_VERSION=0.6.4
+ENV OPENSSL_VERSION=1.1.0e
+
+RUN useradd -r -s /usr/sbin/nologin nginx
 
 RUN ["mkdir","/usr/nginx_source/"]
 WORKDIR "/usr/nginx_source/"
 
 # Preparing Nginx
-RUN wget -O nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
+RUN wget -qO nginx.tar.gz http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz
 RUN tar -xvzf nginx.tar.gz
 
 # Preparing ngx_http_substitutions_filter_module
-RUN wget -O ngx_http_substitutions_filter_module.tar.gz https://github.com/yaoweibin/ngx_http_substitutions_filter_module/archive/v$SUBS_VERSION.tar.gz
+RUN wget -qO ngx_http_substitutions_filter_module.tar.gz https://github.com/yaoweibin/ngx_http_substitutions_filter_module/archive/v$SUBS_VERSION.tar.gz
 RUN tar -xzvf ngx_http_substitutions_filter_module.tar.gz
+
+# Preparing OpenSSL
+RUN wget -qO openssl.tar.gz https://www.openssl.org/source/openssl-$OPENSSL_VERSION.tar.gz
+RUN tar -xvzf openssl.tar.gz
+RUN ls
 
 # Preparing PageSpeed
 RUN wget -O ngpagespeed.tar.gz https://github.com/pagespeed/ngx_pagespeed/archive/latest-stable.tar.gz
@@ -38,7 +46,11 @@ WORKDIR "/usr/nginx_source/nginx-$NGINX_VERSION/"
 
 RUN ./configure \
  --add-module=/usr/nginx_source/ngx_pagespeed-latest-stable \
- --add-module=/usr/nginx_source/ngx_http_substitutions_filter_module-$SUBS_VERSION
+ --add-module=/usr/nginx_source/ngx_http_substitutions_filter_module-$SUBS_VERSION \
+ --with-openssl=/usr/nginx_source/openssl-$OPENSSL_VERSION \
+ --with-http_ssl_module  \
+ --user=nginx  \
+ --group=nginx
 
 RUN make
 RUN make install
@@ -51,8 +63,6 @@ RUN apt-get purge -y \
  libpcre3-dev \
  zlib1g-dev \
  && apt-get autoremove -y
-
-
 
 ENV NGX_LOGLEVEL=debug
 ENV NGX_UPSTREAM_NAME=www.google.com
@@ -91,3 +101,4 @@ sed -i 's/%%NPS_MODIFYCACHINGHEADERS%%/'"$NPS_MODIFYCACHINGHEADERS"'/g' /usr/loc
 CMD [""]
 
 EXPOSE 80
+EXPOSE 443
