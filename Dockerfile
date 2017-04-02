@@ -59,8 +59,12 @@ ENV NGX_UPSTREAM_NAME=www.google.com
 ENV NGX_UPSTREAM_SERVER=www.google.com:80
 
 ENV NPS_ENABLED=on
-ENV NPS_LOWER_CASE_HTML_NAMES=on
-ENV NPS_FILTERS=rewrite_javascript,move_css_to_head,rewrite_css,combine_css,combine_javascript,collapse_whitespace,dedup_inlined_images,elide_attributes
+ENV NPS_LOWERCASEHTMLNAMES=on
+ENV NPS_ENABLEFILTERS=rewrite_javascript,move_css_to_head,rewrite_css,combine_css,combine_javascript,collapse_whitespace,dedup_inlined_images,elide_attributes
+ENV NPS_RESPECTVARY off
+ENV NPS_DISABLEREWRITEONNOTRANSFORM on
+ENV NPS_MODIFYCACHINGHEADERS on
+ENV NPS_XHEADERVALUE "Powered By jmtvms/ngx_pagespeed"
 
 COPY content/nginx.conf /usr/local/nginx/conf/
 COPY content/robots.txt /usr/local/nginx/html/
@@ -72,12 +76,15 @@ RUN ln -sf /dev/stderr /usr/local/nginx/logs/error.log
 WORKDIR /usr/local/nginx/sbin/
 
 ENTRYPOINT \
-sed -i 's/%%NGX_LOGLEVEL%%/'"$NGX_LOGLEVEL"'/g' /usr/local/nginx/conf/nginx.conf && \  
+sed -i 's/%%NGX_LOGLEVEL%%/'"$NGX_LOGLEVEL"'/g' /usr/local/nginx/conf/nginx.conf && \
 sed -i 's/%%NGX_UPSTREAM_NAME%%/'"$NGX_UPSTREAM_NAME"'/g' /usr/local/nginx/conf/nginx.conf && \
 sed -i 's/%%NGX_UPSTREAM_SERVER%%/'"$NGX_UPSTREAM_SERVER"'/g' /usr/local/nginx/conf/nginx.conf && \
 sed -i 's/%%NPS_ENABLED%%/'"$NPS_ENABLED"'/g' /usr/local/nginx/conf/nginx.conf && \
-sed -i 's/%%NPS_LOWER_CASE_HTML_NAMES%%/'"$NPS_LOWER_CASE_HTML_NAMES"'/g' /usr/local/nginx/conf/nginx.conf && \
-sed -i 's/%%NPS_FILTERS%%/'"$NPS_FILTERS"'/g' /usr/local/nginx/conf/nginx.conf && \
+sed -i 's/%%NPS_LOWERCASEHTMLNAMES%%/'"$NPS_LOWERCASEHTMLNAMES"'/g' /usr/local/nginx/conf/nginx.conf && \
+sed -i 's/%%NPS_ENABLEFILTERS%%/'"$NPS_ENABLEFILTERS"'/g' /usr/local/nginx/conf/nginx.conf && \
+sed -i 's/%%NPS_RESPECTVARY%%/'"$NPS_RESPECTVARY"'/g' /usr/local/nginx/conf/nginx.conf && \
+sed -i 's/%%NPS_DISABLEREWRITEONNOTRANSFORM%%/'"$NPS_DISABLEREWRITEONNOTRANSFORM"'/g' /usr/local/nginx/conf/nginx.conf && \
+sed -i 's/%%NPS_MODIFYCACHINGHEADERS%%/'"$NPS_MODIFYCACHINGHEADERS"'/g' /usr/local/nginx/conf/nginx.conf && \
 #cat /usr/local/nginx/conf/nginx.conf && \
 /usr/local/nginx/sbin/./nginx -g 'daemon off;';
 
