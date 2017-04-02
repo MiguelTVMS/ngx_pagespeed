@@ -5,7 +5,7 @@ Docker file do create and build a nginx image with ng_pagepeed module compiled t
 
 ### Environment variables
 You can configure the container using those encvironment variables.  
-***Notice:*** The container must be started with the environment variables set correctly. Any change made on the environment variables after the container is runnig will be discodired.
+***Notice:*** The container must be started with the environment variables set correctly. Any change made on the environment variables after the container is runnig will be disconsidered.
 
 #### Nginx settings:
 The nginx environment variables start with ``NGX_``.
@@ -17,15 +17,15 @@ Set the log levevel you want to be expoded by the nginx error logs.
 Set the name of the nginx upstream server.  
 
 **NGX_UPSTREAM_NAME** *Default:* ``www.google.com:80``  
-The server that will respond for the upstream.
+The server that will respond to the upstream.
 
 #### Page speed module settings:
-The following settins try to use the same names as the settings created by Google on the module. The only diference is that the environment variables are all prepended with ``NPS_``.
-
-For more information see Google's page speed module configurarion page [here](https://modpagespeed.com/doc).
+The following settings use the same names as the settings created by Google on the page speed module. The only diference is that the environment variables are all prepended with ``NPS_``.  
+***Notice:*** Not all settings are available yet. We are working on that.   
+For more information, visit Google's page speed module configurarion page [here](https://modpagespeed.com/doc).  
 
 **NPS_ENABLED**  *Default:* ``on``  
-Enable or disable the page speed module.  
+Enable or disable the page speed module completely.  
 
 **NPS_LOWERCASEHTMLNAMES** *Default:* ``on``  
 HTML is case-insensitive, whereas XML and XHTML are not. Web performance Best Practices suggest using lowercase keywords, and PageSpeed can safely make that transformation in HTML documents. 
@@ -33,8 +33,8 @@ In general, PageSpeed knows whether a document is HTML or not via Content-Type t
 If PageSpeed lowercases keywords in XML pages, it can break the consumers of such pages, such as Flash. To be conservative and avoid breaking such pages, PageSpeed does not lowercase HTML element and attribute names by default. However, you can sometimes achieve a modest improvement in the size of compressed HTML by enabling this feature with settings the environment variable ``NPS_LOWERCASEHTMLNAMES on``.  
 
 **NPS_ENABLEFILTERS** *Default:* ``rewrite_javascript,move_css_to_head,rewrite_css,combine_css,combine_javascript,collapse_whitespace,dedup_inlined_images,elide_attributes``    
-Filters enabled on the page speed module. This variable must have at least one filter or the nginx configuration will break. If you want to disable the module use the NPS_ENABLED variable. for more information about the options on this variable check out the documentation page [here](https://modpagespeed.com/doc/).   
- 
+Filters enabled on the page speed module. For more information about the options on this variable check out the documentation page [here](https://modpagespeed.com/doc/).    
+***Notice:*** This variable must have at least one filter or the nginx configuration will break. If you want to disable the module use the NPS_ENABLED variable. 
 
 **NPS_RESPECTVARY** *Default:* ``off``   
 In order to maximize the number of resources that PageSpeed can rewrite, by default the module does not respect ``Vary: User-Agent`` and other Vary headers on resource files, such as JavaScript and css files. By disregarding the Vary headers, PageSpeed is able to keep the size of the cache down. PageSpeed will always respect ``Vary: Accept-Encoding``, regardless of this setting. PageSpeed will also always respect Vary headers on HTML files, regardless of this setting. 
@@ -67,8 +67,7 @@ Incremented each time we accept a commit to the PSOL trunk. Always increasing.
 All servers running a given release will have the same value for this header by default. If you would like to change the value reported, you can use the ``NPS_XHEADERVALUE`` environment variable to specify what to use instead.
 
 ### Exposed ports
-Sinde the main idea of this contaier is to test ng_pagespeed in action it only exposes the por 80.
-In the future we will make it work on https.
+The main idea of this image is to test ngx_pagespeed in action, it only exposes the por 80(HTTP). We are working to make it work on 443(HTTPS).
 
 ## How to use it
 
@@ -77,7 +76,7 @@ In the future we will make it work on https.
 To use the image as it is just start the container
 
 ```cmd
-docker run -it -p 80:8080 jmtvms/ngx_pagespeed
+docker run -it -p 8080:80 jmtvms/ngx_pagespeed
 ```
 
 ### Set different configuration
@@ -85,7 +84,7 @@ docker run -it -p 80:8080 jmtvms/ngx_pagespeed
 To use this container using different configuration you can set any environment variables using the parameter ``-e "VARIABLE_NAME=value"``.
 
 ```cmd
-docker run -it -p 80:8080 -e "NPS_ENABLED=off" jmtvms/ngx_pagespeed
+docker run -it -p 8080:80 -e "NPS_ENABLED=off" jmtvms/ngx_pagespeed
 ```
 
 This will start the container but the page speed module will be disabled.
