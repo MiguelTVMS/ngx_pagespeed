@@ -4,7 +4,7 @@ LABEL maintainer "João Miguel <joao@miguel.ms>"
 LABEL repository="https://github.com/jmtvms/ngx_pagespeed.git"
 LABEL bugs="https://github.com/jmtvms/ngx_pagespeed/issues"
 LABEL github="https://github.com/jmtvms/ngx_pagespeed"
-LABEL version="1.0.0"
+LABEL version="1.0.1"
 
 RUN apt-get -y update && apt-get install -y \
     wget \
