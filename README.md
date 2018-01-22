@@ -64,7 +64,7 @@ This will start the container but the page speed module will be disabled.
 
 After the container is created you can just use go to ``http://localhost:8080`` and see it working.
 
-### Expoxed Volumes
+### Exposed Volumes
 
 #### /opt/nginx/conf/
 
