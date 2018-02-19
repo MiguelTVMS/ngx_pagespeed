@@ -16,7 +16,7 @@ Set the log levevel you want to be expoded by the nginx error logs.
 **NGX_UPSTREAM_NAME** *Default:* ``www.google.com``  
 Set the name of the nginx upstream server.  
 
-**NGX_UPSTREAM_NAME** *Default:* ``www.google.com:80``  
+**NGX_UPSTREAM_SERVER** *Default:* ``www.google.com:80``  
 The server that will respond to the upstream.
 
 #### Page speed module settings:
